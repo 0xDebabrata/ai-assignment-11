@@ -1,4 +1,4 @@
-export const SERVER_URL = "http://45.79.121.207:8000";
+export const SERVER_URL = process.env.SERVER_URL;
 
 export const getInitialQuestions = async () => {
   const resp = await fetch("/api/initial");
