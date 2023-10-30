@@ -1,7 +1,7 @@
-const SERVER_URL = "http://45.79.121.207:8000";
+export const SERVER_URL = "http://45.79.121.207:8000";
 
 export const getInitialQuestions = async () => {
-  const resp = await fetch(SERVER_URL + "/initial-questions");
+  const resp = await fetch("/api/initial");
   const {
     initial_questions,
     already_asked_mask,
@@ -27,7 +27,7 @@ export const getNextQuestions = async (
   selectedMask: bigint,
   alreadyAskedMask: bigint
 ) => {
-  const resp = await fetch(SERVER_URL + "/next-questions", {
+  const resp = await fetch("/api/next", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -63,7 +63,7 @@ export const getDiseases = async (
   selectedMask: bigint,
   alreadyAskedMask: bigint
 ) => {
-  const resp = await fetch(SERVER_URL + "/matching-diseases", {
+  const resp = await fetch("/api/diseases", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -83,3 +83,4 @@ export const getDiseases = async (
 
   return diseases;
 };
+
