@@ -1,7 +1,7 @@
 'use client'
 import { ChangeEvent, useEffect, useState } from "react";
 
-import Diseases from "@/components/Diseases";
+import FinalStep from "@/components/FinalStep";
 import {
   getDiseases,
   getInitialQuestions,
@@ -47,7 +47,6 @@ function App() {
       await getInitialQuestions();
 
     setQuestions(initial_questions);
-    console.log(initial_questions)
     setSelectedMask(selected_mask);
     setAlreadyAskedMask(already_asked_mask);
     setLoading(false);
@@ -96,6 +95,18 @@ function App() {
     setLoading(false);
   };
 
+  const reset = () => {
+    setError(false)
+    setLoading(true)
+    setQuestions([])
+    setAlreadyAskedMask(BigInt(0n))
+    setSelectedMask(BigInt(0n))
+    setSelectedSymptoms([])
+    setDiseases([])
+    setStep(Steps.INITIAL_INQUIRY)
+    renderInitialQuestions();
+  }
+
   useEffect(() => {
     renderInitialQuestions();
   }, []);
@@ -114,20 +125,28 @@ function App() {
     <section className="bg-neutral-200 min-h-screen text-neutral-800 w-full flex justify-center items-center flex-col">
       <h1 className="text-4xl py-4">disease prediction system</h1>
       <h2 className="text-2xl pb-4">ai assignment 11</h2>
-      {/*
       <div className="flex space-x-2 px-10 py-4 flex-wrap items-center justify-center">
-        <p>
-          symptoms:
-        </p>
         {selectedSymptoms.map(symptom => (
-          <div key={symptom} className="rounded-full py-1 px-3 bg-indigo-200 text-sm border border-indigo-500">
-            {symptom.replaceAll("_", " ")}
-          </div>
+          <>
+            <p>
+              symptoms:
+            </p>
+            <div key={symptom} className="rounded-full py-1 px-3 bg-indigo-200 text-sm border border-indigo-500">
+              {symptom.replaceAll("_", " ")}
+            </div>
+          </>
         ))}
       </div>
-      */}
       {step === 3 ? (
-        <Diseases diseases={diseases} />
+        <>
+          <FinalStep diseases={diseases} />
+          <button 
+            onClick={reset}
+            className="mt-4 rounded bg-neutral-600 px-3 py-1 text-white hover:bg-neutral-700 duration-150"
+          >
+            Reset
+          </button>
+        </>
       ) : (
         questions.length && (
           <>
