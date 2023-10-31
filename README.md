@@ -57,7 +57,7 @@ prediction.
 
 **Frontend:** Nextjs, TypeScript <br/>
 
-**Backend:** Python, FastAPI, Prolog, FastAPI<br/>
+**Backend:** Python, FastAPI, Prolog<br/>
 
 ## Attributions
 
