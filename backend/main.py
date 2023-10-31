@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from lib import (
-    encrypt_symptoms,
+    encode_symptoms,
     get_next_questions_set,
 )
 from helper import (
@@ -27,6 +27,10 @@ app.add_middleware(
 
 @app.get("/initial")
 def get_initial_questions():
+    """
+    Get the initial set of questions presented to the user.
+    """
+
     symptoms_mapping = get_symptoms()
     initial_question_keys = initial_questions_keys()
 
@@ -45,6 +49,10 @@ def get_initial_questions():
 
 @app.post("/next")
 def get_next_questions(request: SelectedSymptoms):
+    """
+    Get the next set of questions depending on the already-selected symptoms.
+    """
+
     already_asked_mask: int = request.already_asked_mask
     already_selected_symptoms_mask: int = request.already_selected_symptoms_mask
 
@@ -53,8 +61,8 @@ def get_next_questions(request: SelectedSymptoms):
     symptoms_mapping = get_symptoms()
     diseases_mapping = get_diseases()
 
-    symptoms_mask = encrypt_symptoms(
-        symptoms_list=selected_symptoms,
+    symptoms_mask = encode_symptoms(
+        symptoms=selected_symptoms,
         symptoms_mapping=symptoms_mapping,
     )
 
@@ -82,13 +90,17 @@ def get_next_questions(request: SelectedSymptoms):
 
 @app.post("/diseases")
 def get_matching_diseases(request: SelectedSymptoms):
+    """
+    Return matching diseases to the client.
+    """
+
     already_selected_symptoms_mask: int = request.already_selected_symptoms_mask
     selected_symptoms: List[str] = request.symptoms
 
     symptoms_mapping = get_symptoms()
 
-    symptoms_mask: int = encrypt_symptoms(
-        symptoms_list=selected_symptoms,
+    symptoms_mask: int = encode_symptoms(
+        symptoms=selected_symptoms,
         symptoms_mapping=symptoms_mapping,
     )
 

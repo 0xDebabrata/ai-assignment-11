@@ -2,7 +2,7 @@ import subprocess
 from subprocess import CalledProcessError
 from typing import Dict, List, Optional
 
-from lib import decrypt_symptoms
+from lib import decode_symptoms 
 
 
 def find_matching_diseases_prolog(
@@ -15,10 +15,11 @@ def find_matching_diseases_prolog(
     symptoms.
 
     Arguments:
+    ---------
 
-    symptoms - List of symptoms or an integer representing the bit mask
+    `symptoms` - List of symptoms or an integer representing the bit mask
 
-    symptoms_mapping - Symptom to disease mapping. Should be provided in case
+    `symptoms_mapping` - Symptom to disease mapping. Should be provided in case
     the bit mask is also provided.
     """
 
@@ -28,7 +29,7 @@ def find_matching_diseases_prolog(
     if isinstance(symptoms, List):
         symptoms_list = symptoms
     elif isinstance(symptoms, int) and symptoms_mapping is not None:
-        symptoms_list = decrypt_symptoms(symptoms, symptoms_mapping)
+        symptoms_list = decode_symptoms(symptoms, symptoms_mapping)
     else:
         raise ValueError(
             "Invalid symptoms configuration provided."

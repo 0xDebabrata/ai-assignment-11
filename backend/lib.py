@@ -1,32 +1,12 @@
 from typing import Dict, List, Optional
 
 
-def decrypt_symptoms(
+def decode_symptoms(
     symptoms: int, symptoms_mapping: Dict[str, int]
 ) -> List[str]:
     """
-    Utility function to decrypt the encoded symptoms which is an integer and
-    obtain a list of corresponding symptom keys.
-
-    Arguments
-    ---------
-    `@Required` `symptoms`: `int`
-
-    The encoded version of the symptoms.
-
-    `@Required` `symptoms_mapping`: `Dict[str, int]`
-
-    A dictionary containing the symptom keys as the dictionary keys and the
-    number of bits to shift to obtain the corresponding encoding of the symptom.
-
-    Returns
-    -------
-    A List[str] containing the symptom keys that match with the provided
-    encoded symptoms.
-
-    Raises
-    ------
-    `KeyError` if no symptom corresponding to the position of a set bit is present.
+    Decode the encoded symptoms mask (int) and obtain a list of corresponding
+    symptom keys.
     """
 
     # the position of shifts required is the key and the symptomp is the value
@@ -45,22 +25,30 @@ def decrypt_symptoms(
 
     return symptoms_list
 
-def encrypt_diseases(
-    diseases_list: List[str],
+def encode_diseases(
+    diseases: List[str],
     diseases_mapping: Dict[str, int],
 ) -> int:
+    """
+    Encode provided diseases into the required bit mask.
+    """
+
     combined_mask = 0
-    for disease in diseases_list:
+    for disease in diseases:
         combined_mask |= diseases_mapping[disease]
     return combined_mask
 
 
-def encrypt_symptoms(
-    symptoms_list: List[str],
+def encode_symptoms(
+    symptoms: List[str],
     symptoms_mapping: Dict[str, int],
 ) -> int:
+    """
+    Encode provided symptoms into the required bit mask.
+    """
+
     combined_mask = 0
-    for symptom in symptoms_list:
+    for symptom in symptoms:
         combined_mask |= 1 << symptoms_mapping[symptom]
     return combined_mask
 
@@ -114,7 +102,7 @@ def find_matching_diseases(
     symptoms_mask: int
 
     if isinstance(symptoms, List) and symptoms_mapping is not None:
-        symptoms_mask = encrypt_symptoms(symptoms, symptoms_mapping)
+        symptoms_mask = encode_symptoms(symptoms, symptoms_mapping)
     elif isinstance(symptoms, int):
         symptoms_mask = symptoms
     else:
@@ -143,8 +131,8 @@ def get_next_questions_set(
         diseases_mapping=diseases_mapping,
     )
 
-    diseases_mask = encrypt_diseases(
-        diseases_list=matching_diseases, diseases_mapping=diseases_mapping
+    diseases_mask = encode_diseases(
+        diseases=matching_diseases, diseases_mapping=diseases_mapping
     )
     next_set_mask: int = diseases_mask & ~already_asked_mask
 
