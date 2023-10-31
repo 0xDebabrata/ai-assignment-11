@@ -1,36 +1,37 @@
 from typing import List
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from utils import (
+from lib import (
     encrypt_symptoms,
-    find_matching_diseases,
     get_next_questions_set,
 )
-from database import Database
+from helper import (
+    get_symptoms,
+    get_diseases,
+    initial_questions_keys,
+)
 from schema import SelectedSymptoms
-from prolog_utils import find_matching_diseases_prolog
+from prolog import find_matching_diseases_prolog
 
 app = FastAPI()
 
 app.add_middleware(
     middleware_class=CORSMiddleware,
-    allow_origins=Database.allowed_origins(),
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 
-@app.get("/initial-questions")
+@app.get("/initial")
 def get_initial_questions():
-    symptoms_mapping = Database.get_symptoms()
-    questions_mapping = Database.get_questions()
-    initial_questions_keys = Database.initial_questions_keys()
+    symptoms_mapping = get_symptoms()
+    initial_question_keys = initial_questions_keys()
 
     initial_mask = 0
-    for question in initial_questions_keys:
+    for question in initial_question_keys:
         initial_mask |= 1 << symptoms_mapping[question]
 
     already_asked_mask: int = initial_mask
@@ -38,20 +39,19 @@ def get_initial_questions():
     return {
         "already_asked_mask": str(already_asked_mask),
         "selected_mask": str(0),
-        "initial_questions": initial_questions_keys,
+        "initial_questions": initial_question_keys,
     }
 
 
-@app.post("/next-questions")
+@app.post("/next")
 def get_next_questions(request: SelectedSymptoms):
     already_asked_mask: int = request.already_asked_mask
     already_selected_symptoms_mask: int = request.already_selected_symptoms_mask
 
     selected_symptoms: List[str] = request.symptoms
 
-    symptoms_mapping = Database.get_symptoms()
-    diseases_mapping = Database.get_diseases()
-    questions_mapping = Database.get_questions()
+    symptoms_mapping = get_symptoms()
+    diseases_mapping = get_diseases()
 
     symptoms_mask = encrypt_symptoms(
         symptoms_list=selected_symptoms,
@@ -80,13 +80,12 @@ def get_next_questions(request: SelectedSymptoms):
     }
 
 
-@app.post("/matching-diseases")
+@app.post("/diseases")
 def get_matching_diseases(request: SelectedSymptoms):
     already_selected_symptoms_mask: int = request.already_selected_symptoms_mask
     selected_symptoms: List[str] = request.symptoms
 
-    symptoms_mapping = Database.get_symptoms()
-    diseases_mapping = Database.get_diseases()
+    symptoms_mapping = get_symptoms()
 
     symptoms_mask: int = encrypt_symptoms(
         symptoms_list=selected_symptoms,

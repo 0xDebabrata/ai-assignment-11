@@ -2,7 +2,7 @@ import subprocess
 from subprocess import CalledProcessError
 from typing import Dict, List, Optional
 
-from utils import decrypt_symptoms
+from lib import decrypt_symptoms
 
 
 def find_matching_diseases_prolog(
