@@ -20,15 +20,15 @@ class Database:
     @staticmethod
     def initial_questions_keys():
         keys: List[str] = [
+            'chills',
+            'malaise',
             'high_fever',
             'fatigue',
-            'vomiting',
-            'headache',
-            'nausea',
-            'loss_of_appetite',
+            'swelling_joints'
             'skin_rash',
             'constipation',
-            'swelling_joints'
+            'headache',
+            'vomiting',
         ]
 
         return keys
