@@ -25,6 +25,10 @@ app.add_middleware(
 )
 
 
+@app.get("/")
+def hello_world():
+    return "Hello world"
+
 @app.get("/initial")
 def get_initial_questions():
     """
