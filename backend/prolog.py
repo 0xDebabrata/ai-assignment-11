@@ -23,7 +23,7 @@ def find_matching_diseases_prolog(
 
     symptoms_string = ", ".join([f"{symptom}(X)" for symptom in symptoms_list])
 
-    with open("./prolog_files/query.pl", "w") as query_file:
+    with open("./data/query.pl", "w") as query_file:
         print(
             f"?- findall(X, ({symptoms_string}), List), print(List), nl.\n?- halt.",
             file=query_file,
@@ -33,8 +33,8 @@ def find_matching_diseases_prolog(
 
     prolog_cmd: list[str] = [
         "swipl",
-        "./prolog_files/knowledge_base.pl",
-        "./prolog_files/query.pl",
+        "./data/knowledge_base.pl",
+        "./data/query.pl",
     ]
 
     try:
