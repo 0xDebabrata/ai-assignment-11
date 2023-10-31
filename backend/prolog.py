@@ -9,6 +9,19 @@ def find_matching_diseases_prolog(
     symptoms: int | List[str],
     symptoms_mapping: Optional[Dict[str, int]] = None,
 ) -> List[str]:
+    """
+    Execute swipl statements to get results from Prolog runtime.
+    This function is used to find the matching diseases for the provided
+    symptoms.
+
+    Arguments:
+
+    symptoms - List of symptoms or an integer representing the bit mask
+
+    symptoms_mapping - Symptom to disease mapping. Should be provided in case
+    the bit mask is also provided.
+    """
+
     symptoms_list: List[str]
     matching_diseases: list[str] = []
 
@@ -18,7 +31,7 @@ def find_matching_diseases_prolog(
         symptoms_list = decrypt_symptoms(symptoms, symptoms_mapping)
     else:
         raise ValueError(
-            "symptoms must be either int or List[str].\nIn case of int, symptoms_mapping must be provided."
+            "Invalid symptoms configuration provided."
         )
 
     symptoms_string = ", ".join([f"{symptom}(X)" for symptom in symptoms_list])
@@ -38,21 +51,20 @@ def find_matching_diseases_prolog(
     ]
 
     try:
-        returned_output = subprocess.check_output(check_cmd)
-        returned_string = returned_output.decode("utf-8").strip()
-        if len(returned_string) == 0:
+        resp = subprocess.check_output(check_cmd)
+        data = resp.decode("utf-8").strip()
+        if len(data) == 0:
             raise FileNotFoundError(
                 "swipl is not installed, please install it before using"
             )
 
-        returned_output: bytes = subprocess.check_output(prolog_cmd)
-        returned_string = returned_output.decode("utf-8").strip()
-        # [1:-1] indexing is done to remove the opening and closing square brackets
-        returned_string = returned_string[1:-1]
+        resp: bytes = subprocess.check_output(prolog_cmd)
+        data = resp.decode("utf-8").strip()
+        data = data[1:-1]       # remove square enclosing brackets
 
-        if len(returned_string) != 0:
+        if len(data) != 0:
             matching_diseases = [
-                disease.strip() for disease in returned_string.split(",")
+                disease.strip() for disease in data.split(",")
             ]
     except CalledProcessError as e:
         print(f"CalledProcessError :: {e.cmd}")
@@ -60,4 +72,3 @@ def find_matching_diseases_prolog(
         print(e)
 
     return matching_diseases
-
