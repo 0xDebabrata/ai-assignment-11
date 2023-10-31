@@ -125,18 +125,20 @@ function App() {
     <section className="bg-neutral-200 min-h-screen text-neutral-800 w-full flex justify-center items-center flex-col">
       <h1 className="text-4xl py-4">disease prediction system</h1>
       <h2 className="text-2xl pb-4">ai assignment 11</h2>
-      <div className="flex space-x-2 px-10 py-4 flex-wrap items-center justify-center">
-        {selectedSymptoms.map(symptom => (
-          <>
-            <p>
-              symptoms:
-            </p>
-            <div key={symptom} className="rounded-full py-1 px-3 bg-indigo-200 text-sm border border-indigo-500">
-              {symptom.replaceAll("_", " ")}
-            </div>
-          </>
-        ))}
-      </div>
+      {selectedSymptoms.length ? (
+        <div className="flex space-x-2 px-10 py-4 flex-wrap items-center justify-center">
+          <p>
+            symptoms:
+          </p>
+          {selectedSymptoms.map(symptom => (
+            <>
+              <div key={symptom} className="rounded-full py-1 px-3 bg-indigo-200 text-sm border border-indigo-500">
+                {symptom.replaceAll("_", " ")}
+              </div>
+            </>
+          ))}
+        </div>
+      ) : null}
       {step === 3 ? (
         <>
           <FinalStep diseases={diseases} />

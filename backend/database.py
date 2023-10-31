@@ -24,7 +24,7 @@ class Database:
             'malaise',
             'high_fever',
             'fatigue',
-            'swelling_joints'
+            'swelling_joints',
             'skin_rash',
             'constipation',
             'headache',
