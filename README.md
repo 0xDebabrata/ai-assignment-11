@@ -63,3 +63,13 @@ prediction.
 
 This project uses a knowledge base derived from a publicly available Kaggle
 dataset available at this link: [Kaggle Dataset Link](https://www.kaggle.com/datasets/itachi9604/disease-symptom-description-dataset).
+
+## Screenshots
+
+<img width="1278" alt="Screenshot 2023-11-02 at 12 26 11 AM" src="https://github.com/0xDebabrata/ai-assignment-11/assets/37393381/af5c94b6-a057-4c44-a651-6f4cb07b9538">
+
+<img width="1279" alt="Screenshot 2023-11-02 at 12 26 32 AM" src="https://github.com/0xDebabrata/ai-assignment-11/assets/37393381/ed38e6e3-126e-4208-b650-4f14bdfacc24">
+
+<img width="1279" alt="Screenshot 2023-11-02 at 12 26 53 AM" src="https://github.com/0xDebabrata/ai-assignment-11/assets/37393381/a59e8e2f-3dc1-4e6e-9654-7e15876fe82b">
+
+
